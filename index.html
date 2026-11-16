@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ethical Hacking & Security Testing Lab</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        body {
+            background-color: #0d1117;
+            color: #00ff66;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: #161b22;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 2px solid #00ff66;
+        }
+
+        header h1 {
+            font-size: 2rem;
+            letter-spacing: 2px;
+        }
+
+        header p {
+            color: #8b949e;
+            margin-top: 5px;
+        }
+
+        .container {
+            display: flex;
+            flex: 1;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        nav {
+            width: 260px;
+            background-color: #161b22;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #30363d;
+        }
+
+        nav h3 {
+            color: #ffffff;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #00ff66;
+            padding-bottom: 5px;
+        }
+
+        nav ul {
+            list-style: none;
+        }
+
+        nav li {
+            padding: 10px;
+            margin-bottom: 8px;
+            background: #21262d;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: 0.3s;
+            color: #c9d1d9;
+            font-size: 0.9rem;
+        }
+
+        nav li:hover, nav li.active {
+            background: #00ff66;
+            color: #0d1117;
+            font-weight: bold;
+        }
+
+        main {
+            flex: 1;
+            background-color: #161b22;
+            padding: 25px;
+            border-radius: 8px;
+            border: 1px solid #30363d;
+        }
+
+        .module {
+            display: none;
+        }
+
+        .module.active {
+            display: block;
+        }
+
+        h2 {
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+
+        .description {
+            color: #8b949e;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+
+        .lab-box {
+            background: #0d1117;
+            padding: 20px;
+            border-radius: 6px;
+            border: 1px dashed #00ff66;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"], input[type="password"], input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            background: #161b22;
+            border: 1px solid #30363d;
+            color: #00ff66;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: #00ff66;
+            border: none;
+            color: #0d1117;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        button:hover {
+            background: #00cc52;
+        }
+
+        .terminal-output {
+            background: #000;
+            color: #00ff66;
+            padding: 15px;
+            border-radius: 4px;
+            min-height: 80px;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+            border: 1px solid #30363d;
+        }
+
+        footer {
+            text-align: center;
+            padding: 15px;
+            background: #161b22;
+            color: #8b949e;
+            border-top: 1px solid #30363d;
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>[ SecLab ] Ethical Testing Grounds</h1>
+        <p>নিরাপদ পরিবেশে ওয়েব সিকিউরিটি ও পেনেট্রেশন টেস্টিং প্র্যাকটিস ল্যাব</p>
+    </header>
+
+    <div class="container">
+        <nav>
+
+            <ul>
+                <li class="active" onclick="switchModule('sqli')">1. SQL Injection</li>
+                <li onclick="switchModule('xss')">2. Cross-Site Scripting</li>
+                <li onclick="switchModule('brute')">3. Brute Force Attack</li>
+                <li onclick="switchModule('cmdi')">4. Command Injection</li>                <li onclick="switchModule('csrf')">5. CSRF Vulnerability</li>
+                <li onclick="switchModule('upload')">6. Insecure File Uploa</li>
+            </ul>
+        </nav>
+
+        <main>
+            <!-- Module 1: SQL Injection -->
+            <div id="sqli" class="module active">
+                <h2>Module 1: SQL Injection (SQLi)</h2>
+                <p class="description">ডাটাবেজ ক্যোয়ারি বাইপাস করার মেকানিজম পরীক্ষা করুন। উদাহরণ: <code>' OR '1'='1</code> ব্যবহার করে লগইন বাইপাস করার চেষ্টা করুন।</p>
+
+                <div class="lab-box">
+                    <label>Username:</label>
+                    <input type="text" id="sqli-user" placeholder="admin">
+                    <label>Password:</label>
+                    <input type="password" id="sqli-pass" placeholder="password">
+                    <button onclick="testSQLi()">Test Authentication</button>
+                </div>
+                <div class="terminal-output" id="sqli-out">> সিস্টেমে টেস্ট করার জন্য ইনপুট দিন...</div>
+            </div>
+
+            <!-- Module 2: XSS -->
+            <div id="xss" class="module">
+                <h2>Module 2: Reflected XSS</h2>
+                <p class="description">ইনপুট ফিল্ডে ক্ষতিকর স্কিপ্ট ইনজেক্ট করে পেজ রেসপন্স চেক করুন। যেমন: <code>&lt;script&gt;alert('Hacked!')&lt;/script&gt;</code></p>
+
+                <div class="lab-box">
+                    <label>Search Query:</label>
+                    <input type="text" id="xss-input" placeholder="Type something...">
+                    <button onclick="testXSS()">Submit Query</button>
+                </div>
+                <div class="terminal-output" id="xss-out">> আউটপুট এখানে দেখাবে...</div>
+            </div>
+
+            <!-- Module 3: Brute Force -->
+            <div id="brute" class="module">
+                <h2>Module 3: Rate Limiting & Brute Force</h2>
+                <p class="description">বারবার ভুল পাসওয়ার্ড দেওয়ার মাধ্যমে সিস্টেমে কোনো রেট-লিমিটিং সেট করা আছে কি না তা টেস্ট করুন।</p>
+
+                <div class="lab-box">
+                    <label>Password Attempt:</label>
+                    <input type="password" id="brute-pass" placeholder="Enter password">
+                    <button onclick="testBrute()">Submit Attempt</button>
+                </div>
+                <div class="terminal-output" id="brute-out">> Attempt Count: 0</div>
+            </div>
+
+            <!-- Module 4: Command Injection -->
+            <div id="cmdi" class="module">
+                <h2>Module 4: Command Injection</h2>
+                <p class="description">সিস্টেম পিং টেস্ট ইমুলেশন। চেষ্টা করুন অতিরিক্ত কমান্ড পেয়ার করার জন্য, যেমন: <code>127.0.0.1; whoami</code></p>
+
+                <div class="lab-box">
+                    <label>Target IP / Host:</label>
+                    <input type="text" id="cmdi-input" placeholder="127.0.0.1">
+                    <button onclick="testCmdi()">Ping Host</button>
+                </div>
+                <div class="terminal-output" id="cmdi-out">> রেসপন্স আউটপুট...</div>
+            </div>
+
+            <!-- Module 5: CSRF -->
+            <div id="csrf" class="module">
+                <h2>Module 5: Cross-Site Request Forgery (CSRF)</h2>
+                <p class="description">অ্যাকাউন্টের ইমেইল পরিবর্তনের রিকোয়েস্টে CSRF টোকেন অনুপস্থিত থাকলে কীভাবে ভিকটিমকে দিয়ে ম্যালিশিয়াস ফর্ম সাবমিট করানো যায় তা টেস্ট করুন।</p>
+
+                <div class="lab-box">
+                    <label>New Email Address:</label>
+                    <input type="text" id="csrf-email" placeholder="attacker@evil.com">
+                    <label style="display:flex; align-items:center; margin-top:10px; color:#8b949e;">
+                        <input type="checkbox" id="csrf-token-check" style="margin-right:8px;"> Enable Anti-CSRF Token Protection
+                    </label>
+                    <button onclick="testCSRF()" style="margin-top:12px;">Simulate CSRF Attack</button>
+                </div>
+                <div class="terminal-output" id="csrf-out">> CSRF টেস্টের জন্য রিকোয়েস্ট পাঠান...</div>
+            </div>
+
+            <!-- Module 6: Insecure File Upload -->
+            <div id="upload" class="module">
+                <h2>Module 6: Insecure File Upload</h2>
+                <p class="description">সার্ভারে এক্সটেনশন ফিল্টারিং না থাকলে ক্ষতিকর ফাইল (যেমন: <code>shell.php</code> বা <code>script.phtml</code>) আপলোড করে আরসিই (RCE) টেস্ট করুন।</p>
+
+                <div class="lab-box">
+                    <label>Select File to Upload:</label>
+                    <input type="file" id="upload-file">
+                    <button onclick="testUpload()">Upload File</button>
+                </div>
+                <div class="terminal-output" id="upload-out">> ফাইল আপলোড সিমুলেশন...</div>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <p>Disclaimer: এই টুলটি শুধুমাত্র শিক্ষামূলক ও সিকিউরিটি টেস্ট সংক্রান্ত শেখার কাজের জন্য তৈরি করা হয়েছে।</p>
+    </footer>
+
+    <script>
+        function switchModule(moduleId) {
+            document.querySelectorAll('.module').forEach(m => m.classList.remove('active'));
+            document.querySelectorAll('nav li').forEach(li => li.classList.remove('active'));
+
+            document.getElementById(moduleId).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // SQL Injection Logic Simulation
+        function testSQLi() {
+            const user = document.getElementById('sqli-user').value;
+            const pass = document.getElementById('sqli-pass').value;
+            const out = document.getElementById('sqli-out');
+
+            let query = `SELECT * FROM users WHERE username='${user}' AND password='${pass}';`;
+
+            if (user.includes("' OR '1'='1") || pass.includes("' OR '1'='1")) {
+                out.innerText = `Executing Query: ${query}\n\n[+] VULNERABILITY FOUND!\n[+] Authentication Bypassed! Logged in as Administrator.`;
+                out.style.color = "#00ff66";
+            } else if (user === "admin" && pass === "secret123") {
+                out.innerText = `Executing Query: ${query}\n\n[+] Login Successful (Valid Credentials).`;
+                out.style.color = "#00ff66";
+            } else {
+                out.innerText = `Executing Query: ${query}\n\n[-] Access Denied: Invalid Credentials.`;
+                out.style.color = "#ff4d4d";
+            }
+        }
+
+        // XSS Logic Simulation
+        function testXSS() {
+            const input = document.getElementById('xss-input').value;
+            const out = document.getElementById('xss-out');
+
+            if (input.includes("<script>") && input.includes("</script>")) {
+                out.innerHTML = `> Executing reflected response:\n<span style="color:#ff4d4d;">[!] Alert Triggered via XSS Payload!</span>\nRaw Input: ${escapeHtml(input)}`;
+            } else {
+                out.innerText = `> Search result for: ${input}\n[+] Output safely rendered.`;
+            }
+        }
+
+        function escapeHtml(text) {
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+
+        // Brute Force Logic Simulation
+        let attempts = 0;
+        function testBrute() {
+            const pass = document.getElementById('brute-pass').value;
+            const out = document.getElementById('brute-out');
+            attempts++;
+
+            if (pass === "cyber2026") {
+                out.innerText = `[+] Password Cracked on attempt ${attempts}!\nCorrect Password: cyber2026`;
+                out.style.color = "#00ff66";
+            } else {
+                out.innerText = `[-] Failed Attempt #${attempts}.\n[!] Warning: No Rate Limiting detected! Brute-force is possible.`;
+                out.style.color = "#ff4d4d";
+            }
+        }
+
+        // Command Injection Logic Simulation
+        function testCmdi() {
+            const input = document.getElementById('cmdi-input').value;
+            const out = document.getElementById('cmdi-out');
+
+            if (input.includes(";") || input.includes("&&") || input.includes("||")) {
+                let extraCmd = input.split(/;|&&|\|\|/)[1];
+                out.innerText = `PING ${input.split(/;|&&|\|\|/)[0]} (127.0.0.1) 56(84) bytes of data.\n64 bytes from 127.0.0.1: icmp_seq=1 ttl=64 time=0.040 ms\n\n[+] Executing injected command: ${extraCmd.trim()}\nOutput: root (uid=0, gid=0)`;
+                out.style.color = "#ff4d4d";
+            } else {
+                out.innerText = `PING ${input} (127.0.0.1) 56(84) bytes of data.\n64 bytes from 127.0.0.1: icmp_seq=1 ttl=64 time=0.035 ms\n--- ${input} ping statistics ---`;
+                out.style.color = "#00ff66";
+            }
+        }
+
+        // CSRF Logic Simulation
+        function testCSRF() {
+            const email = document.getElementById('csrf-email').value || "attacker@evil.com";
+            const tokenEnabled = document.getElementById('csrf-token-check').checked;
+            const out = document.getElementById('csrf-out');
+
+            if (tokenEnabled) {
+                out.innerText = `[+] POST /api/update-email\n[-] Request Blocked: Missing or Invalid Anti-CSRF Token.\n[+] Defense mechanism working properly!`;
+                out.style.color = "#00ff66";
+            } else {
+                out.innerText = `[+] POST /api/update-email (No CSRF Token verified)\n[!] VULNERABILITY FOUND: Account Email successfully changed to ${email} via malicious external site!`;
+                out.style.color = "#ff4d4d";
+            }
+        }
+
+        // Insecure File Upload Simulation
+        function testUpload() {
+            const fileInput = document.getElementById('upload-file');
+            const out = document.getElementById('upload-out');
+
+            if (fileInput.files.length === 0) {
+                out.innerText = `[-] Please select a file to upload first.`;
+                out.style.color = "#ff4d4d";
+                return;
+            }
+
+            const fileName = fileInput.files[0].name;
+            const fileExt = fileName.split('.').pop().toLowerCase();
+
+            if (['php', 'phtml', 'exe', 'sh', 'asp'].includes(fileExt)) {
+                out.innerText = `[+] Uploading file: ${fileName}\n[!] VULNERABILITY FOUND: Dangerous executable file extension (.${fileExt}) allowed!\n[+] Web Shell accessible at: /uploads/${fileName}`;
+                out.style.color = "#ff4d4d";
+            } else {
+                out.innerText = `[+] Uploading file: ${fileName}\n[+] File successfully uploaded to /uploads/${fileName} (Safe Extension).`;
+                out.style.color = "#00ff66";
+            }
+        }
+    </script>
+</body>
+</html>
